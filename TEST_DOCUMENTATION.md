@@ -16,7 +16,7 @@ The test suite consists of three types of tests:
 # Run all tests
 npm test
 
-# Run tests in watch mode (requires installing mocha globally)
+# Run tests in watch mode
 npx mocha --watch 'test/**/*.test.js'
 
 # Run specific test files
@@ -97,7 +97,7 @@ Application tests for the Georgia RFP scraper.
 - Output format is JSON-serializable
 - Error handling for invalid options
 
-**Note:** Some tests are skipped when the scraper returns empty results (e.g., when the source website is unavailable).
+**Note:** Some tests are skipped when external dependencies are unavailable (e.g., when the source website is down or returns no data).
 
 ### cli_application.test.js
 

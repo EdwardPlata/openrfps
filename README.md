@@ -110,7 +110,7 @@ Tests are organized in the `test/` directory:
 - `test/unit/` - Unit tests for utility functions
 - `test/integration/` - Integration and application tests
 
-All tests use [Mocha](https://mochajs.org/) as the test framework and Node.js built-in `assert` for assertions.
+All tests use [Mocha](https://mochajs.org/) as the test framework and Node.js built-in `assert` module for assertions.
 
 ### What about the schema?
 See [OUTPUT.md](https://github.com/dobtco/openrfps/blob/master/OUTPUT.md) for the current schema.
