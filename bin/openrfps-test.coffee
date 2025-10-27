@@ -1,0 +1,73 @@
+{program} = require 'commander'
+colors = require 'colors'
+_ = require 'underscore'
+_s = require 'underscore.string'
+
+require './utils/almost_every'
+
+EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+URL_REGEX = /^(ht|f)tps?:\/\/[a-z0-9-\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?$/
+
+program
+  .option('-s, --skipsave', "Don't cache results to .json file")
+  .option('-l, --limit <n>', 'Stop after processing <n> results [10]', parseInt, 10)
+  .option('-f, --force', "Force re-scraping (by default, we'll try to test against the cached .json files)")
+  .parse(process.argv)
+
+failingTests = 0
+
+runAssertion = (msg, testFunc) ->
+  if testFunc()
+    console.log "#{msg}: ".yellow + "OK".green
+  else
+    console.log "#{msg}: ".yellow + "Not OK".red
+    failingTests += 1
+
+exitProperly = ->
+  if failingTests > 0
+    process.exit(1)
+  else
+    process.exit(0)
+
+require('./utils/run_scraper') program, (parsedJson) ->
+
+  return process.exit(1) unless parsedJson
+
+  runAssertion 'The scraper returns at least one result', ->
+    (typeof parsedJson == 'object') && !_.isEmpty(parsedJson)
+
+  runAssertion 'item.id is returned for all items', ->
+    !_.isEmpty(parsedJson) && _.every parsedJson, (item) ->
+      item.id
+
+  runAssertion 'item.contact_email is a proper address (or blank)', ->
+    !_.isEmpty(parsedJson) && _.almostEvery parsedJson, (item) ->
+      return true if !item.contact_email
+      _s.trim(item.contact_email).match(EMAIL_REGEX)
+
+  runAssertion 'download URLs are valid (or blank)', ->
+    !_.isEmpty(parsedJson) && _.almostEvery parsedJson, (item) ->
+      return true if _.isEmpty(item.downloads)
+      _.every item.downloads, (x) ->
+        x.match(URL_REGEX)
+
+  runAssertion 'item.id is unique for each item', ->
+    pluckedIds = _.pluck(parsedJson, 'id')
+    uniqIds = _.uniq(pluckedIds)
+    !_.isEmpty(parsedJson) && (pluckedIds.length == uniqIds.length)
+
+  runAssertion 'item.title is returned for all items', ->
+    !_.isEmpty(parsedJson) && _.every parsedJson, (item) ->
+      item.title
+
+  runAssertion "NIGP codes are digits", ->
+    _.every parsedJson, (item) ->
+
+      return true if _.isEmpty(item.nigp_codes)
+
+      if item.nigp_codes
+        return _.every item.nigp_codes, ( (x) -> x.match /^[0-9]+$/ )
+
+      return true
+
+  exitProperly()

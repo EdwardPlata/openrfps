@@ -4,11 +4,11 @@
   "description": "Scraping government contracting opportunities.",
   "main": "index.coffee",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/dobtco/openrfps.git"
+    "url": "https://github.com/EdwardPlata/openrfps.git"
   },
   "keywords": [
     "rfps",
@@ -18,18 +18,23 @@
   "author": "Department of Better Technology",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dobtco/openrfps/issues"
+    "url": "https://github.com/EdwardPlata/openrfps/issues"
   },
-  "homepage": "https://github.com/dobtco/openrfps",
+  "homepage": "https://github.com/EdwardPlata/openrfps",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
-    "coffee-script": "~1.7.1",
-    "commander": "~2.1.0",
-    "colors": "~0.6.2",
-    "mocha": "~1.17.1",
-    "underscore": "~1.6.0",
-    "cheerio": "~0.13.1",
-    "request": "~2.34.0",
-    "async": "~0.2.10",
-    "underscore.string": "~2.3.3"
+    "coffeescript": "^2.7.0",
+    "commander": "^12.1.0",
+    "colors": "^1.4.0",
+    "cheerio": "^1.0.0",
+    "axios": "^1.7.7",
+    "async": "^3.2.6",
+    "underscore": "^1.13.7",
+    "underscore.string": "^3.3.6"
+  },
+  "devDependencies": {
+    "mocha": "^11.0.0"
   }
 }
