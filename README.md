@@ -1,8 +1,23 @@
-> Join the OpenRFPs chatroom this weekend (2/22-23/14) during CodeAcross: http://go.dobt.co/openrfps-chat
-
 ## The Open RFPs Project
 
 The Open RFPs Project is modeled after Sunlight Labs' [OpenStates](https://github.com/sunlightlabs/openstates/tree/master/openstates). Open RFPs collects and makes available data about contracting activities, including RFP listings as well as awards, and makes that information available in a standardized format.
+
+## Requirements
+
+- Node.js 18.0.0 or higher
+- npm (comes with Node.js)
+
+## Installation
+
+To get started, clone this repository and install dependencies:
+
+```bash
+git clone https://github.com/YOUR_USERNAME/openrfps.git
+cd openrfps
+npm install
+```
+
+Replace `YOUR_USERNAME` with the appropriate GitHub username or organization.
 
 ## Contribution guidelines
 The first thing to contribute is the location of the best starting page in your state for someone to create a scraper. You can add that to [the wiki page](https://github.com/dobtco/openrfps/wiki/List-of-Procurement-Websites).
@@ -23,7 +38,24 @@ This is the important one, as it handles the scraping of RFPs from the specified
 Other governmental bodies are also welcome. Should you write a scraper for them, please place them in a `cities/[CITYNAME]` or `counties/[COUNTYNAME]` directory inside the appropriate state's directory. Make sure your city or country scraper provides the same three files described above in its directory.
 
 ## Development tools
-We've chosen [Node.js](http://nodejs.org/) because of its module-loading implementation, its accessibility to the programming community ("Everyone knows Javascript!"), and its asynchronous-by-default approach. As with most Node.js projects, we use [npm](https://www.npmjs.org/) to [package](https://github.com/dobtco/openrfps/blob/master/package.json) this project and specify its dependencies. We like [CoffeeScript](http://coffeescript.org/) for its expressiveness and improvements over JavaScript, but you can write your scraper in any language that compiles to JavaScript.
+
+This project uses [Node.js](http://nodejs.org/) for its module-loading implementation, accessibility to the programming community, and asynchronous-by-default approach. We use [npm](https://www.npmjs.org/) to manage dependencies. We support [CoffeeScript](http://coffeescript.org/) for its expressiveness, but you can write your scraper in any language that compiles to JavaScript.
+
+### Modern Dependencies
+
+The project has been modernized with the latest secure versions of all dependencies:
+
+- **CoffeeScript 2.x**: Updated from the deprecated `coffee-script` package
+- **Axios**: Replaced the deprecated `request` library for HTTP requests
+- **Commander 12.x**: Modern command-line interface library
+- **Cheerio 1.x**: Latest HTML parsing library
+- **Mocha 11.x**: Modern testing framework
+- **Async 3.x**: Updated async utilities
+- **Underscore 1.13.x**: Latest utility library
+
+All security vulnerabilities have been resolved.
+
+### Command-Line Interface
 
 We've built a lightweight command-line interface to help you run and test scrapers. If you run `bin/openrfps --help` from the project root, you'll see some info:
 

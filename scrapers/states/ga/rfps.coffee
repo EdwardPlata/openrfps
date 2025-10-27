@@ -1,5 +1,5 @@
 # Require the necessary modules.
-request = require 'request'
+axios = require 'axios'
 cheerio = require 'cheerio'
 async = require 'async'
 _ = require 'underscore'
@@ -42,7 +42,15 @@ module.exports = (opts, done) ->
   rfps = []
 
   # Send a POST request to the site's endpoint. Why we're POSTing to read data, you'll have to tell me...
-  request.post 'http://ssl.doas.state.ga.us/PRSapp/PublicBidDisplay', form: FILTER_PARAMS, (err, response, body) ->
+  formData = new URLSearchParams(FILTER_PARAMS).toString()
+  
+  axios.post 'http://ssl.doas.state.ga.us/PRSapp/PublicBidDisplay', formData, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }
+  .then (response) ->
+    body = response.data
 
     # Load the resulting HTML into Cheerio, a jQuery-like DOM parser.
     $ = cheerio.load body
@@ -68,13 +76,18 @@ module.exports = (opts, done) ->
     async.eachLimit rfps, 5, getRfpDetails, (err) ->
       console.log(err.red) if err
       done rfps
+  .catch (err) ->
+    console.log(err.red) if err
+    done []
 
   # A function for scraping the details from an RFP page. It's just more DOM-traversal,
   # so it should look familiar by now.
   getRfpDetails = (item, cb) ->
     return getMaintenanceRfpDetails(item, cb) if item.html_url.match 'maintanence'
 
-    request.get item.html_url, (err, response, body) ->
+    axios.get item.html_url
+    .then (response) ->
+      body = response.data
       $ = cheerio.load body
       $table = $('table').eq(1)
 
@@ -109,11 +122,16 @@ module.exports = (opts, done) ->
       console.log "Successfully downloaded #{item.title}".green
 
       cb()
+    .catch (err) ->
+      console.log "Error downloading #{item.id}: #{err.message}".red
+      cb()
 
   # Maintenance RFPs have a different layout than the other RFPs.
   # See http://ssl.doas.state.ga.us/PRSapp/maintanence?eQHeaderPK=125334&source=publicViewQuote for an example.
   getMaintenanceRfpDetails = (item, cb) ->
-    request.get item.html_url, (err, response, body) ->
+    axios.get item.html_url
+    .then (response) ->
+      body = response.data
       $ = cheerio.load body
       $table = $('table').eq(3)
 
@@ -124,5 +142,7 @@ module.exports = (opts, done) ->
         nigp: $table.find("tr:contains(NIGP Code Selection)").find('td').eq(1).text().match(/(\d+)/ig)
 
       cb()
-
+    .catch (err) ->
+      console.log "Error downloading maintenance RFP #{item.id}: #{err.message}".red
+      cb()
 

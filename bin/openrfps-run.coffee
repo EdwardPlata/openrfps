@@ -1,0 +1,15 @@
+{program} = require 'commander'
+fs = require 'fs'
+colors = require 'colors'
+
+program
+  .option('-s, --skipsave', "Don't cache results to .json file")
+  .option('-l, --limit <n>', 'Stop after processing <n> results', parseInt)
+  .parse(process.argv)
+
+program.force = true
+
+require('./utils/run_scraper') program, (parsedJson) ->
+
+  return unless parsedJson
+  console.log JSON.stringify(parsedJson, null, 2)
