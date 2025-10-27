@@ -92,6 +92,26 @@ To run both the scraper and the tests all with one command:
 
     bin/openrfps test scrapers/states/ga/rfps.coffee --force
 
+### Running the Test Suite
+
+This project includes a comprehensive test suite with unit tests, integration tests, and application tests. To run all tests:
+
+```bash
+npm test
+```
+
+The test suite includes:
+
+- **Unit tests**: Test individual utility functions like `almost_every` and `run_scraper`
+- **Integration tests**: Test scraper validation logic, data structure compliance, and CLI commands
+- **Application tests**: End-to-end tests that actually fetch RFPs and verify output
+
+Tests are organized in the `test/` directory:
+- `test/unit/` - Unit tests for utility functions
+- `test/integration/` - Integration and application tests
+
+All tests use [Mocha](https://mochajs.org/) as the test framework and Node.js built-in `assert` module for assertions.
+
 ### What about the schema?
 See [OUTPUT.md](https://github.com/dobtco/openrfps/blob/master/OUTPUT.md) for the current schema.
 
