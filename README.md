@@ -12,10 +12,12 @@ The Open RFPs Project is modeled after Sunlight Labs' [OpenStates](https://githu
 To get started, clone this repository and install dependencies:
 
 ```bash
-git clone https://github.com/EdwardPlata/openrfps.git
+git clone https://github.com/YOUR_USERNAME/openrfps.git
 cd openrfps
 npm install
 ```
+
+Replace `YOUR_USERNAME` with the appropriate GitHub username or organization.
 
 ## Contribution guidelines
 The first thing to contribute is the location of the best starting page in your state for someone to create a scraper. You can add that to [the wiki page](https://github.com/dobtco/openrfps/wiki/List-of-Procurement-Websites).
